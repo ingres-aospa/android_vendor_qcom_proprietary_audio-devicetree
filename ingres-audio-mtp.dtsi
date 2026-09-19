@@ -1,0 +1,75 @@
+#include "xiaomi-sm8450-common.dtsi"
+
+&waipio_snd {
+	fsa4480-i2c-handle = <&dio4480>;
+	asoc-codec = <&stub_codec>, <&lpass_cdc>,
+			<&wcd938x_codec>, <&swr_haptics>,
+			<&wsa883x_0221>, <&wsa883x_0222>;
+	asoc-codec-names = "msm-stub-codec.1", "lpass-cdc",
+			"wcd938x_codec", "swr-haptics",
+			"wsa-codec1", "wsa-codec2";
+};
+
+&tlmm {
+	sbu_uart_en_ctrl {
+		sbu_uart_en_idle_ze: uart_audio_en_idle_ze {
+			mux {
+				pins = "gpio12";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio12";
+				drive-strength = <2>;
+				bias-pull-down;
+				output-low;
+			};
+		};
+
+		sbu_uart_en_active_ze: uart_audio_en_active_ze {
+			mux {
+				pins = "gpio12";
+				function = "gpio";
+			};
+			config {
+				pins = "gpio12";
+				drive-strength = <2>;
+				bias-disable;
+				output-high;
+			};
+		};
+	};
+};
+
+&soc {
+	sbu_uart_en: msm_cdc_pinctrl@12 {
+		compatible = "qcom,msm-cdc-pinctrl";
+		pinctrl-names = "aud_active", "aud_sleep";
+		pinctrl-0 = <&sbu_uart_en_active_ze>;
+		pinctrl-1 = <&sbu_uart_en_idle_ze>;
+		#gpio-cells = <0>;
+	};
+};
+
+&swr_haptics {
+	status = "disabled";
+};
+
+&wsa2_macro {
+        status = "disabled";
+};
+
+&swr_dmic_01 {
+        status = "disabled";
+};
+
+&swr_dmic_02 {
+        status = "disabled";
+};
+
+&swr_dmic_03 {
+        status = "disabled";
+};
+
+&swr_dmic_04 {
+        status = "disabled";
+};
